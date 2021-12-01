@@ -178,58 +178,80 @@ SELECT * FROM employment_contract;
 4.	Создать запросы для вывода:
 ```sql
 --a)    названий всех нанимателей, вместе с местом их расположения;
-SELECT name, location FROM employer;
+SELECT name, location 
+FROM employer;
 --b)    всех номеров бюро найма;
 SELECT id_office FROM hire_office;
 --c)    всех различных предоставленных профессий вместе с их количеством.
-SELECT name_prof, number_of_jobs FROM profession;
+SELECT name_prof, number_of_jobs 
+FROM profession;
 ```
 5.	Создать запросы для получения инорфмации о:
 ```sql
 --a)    названии и месте расположения нанимателей, имеющих льготу менее 8%;
-SELECT name, location FROM employer WHERE benefit_percentage < 8;
---b)    профессиях, имеющих стоиомость найма более 10000руб. для которых Москва не была местом прежней работы;
-SELECT name_prof, cost_rub, plase_of_prev_work FROM profession WHERE cost_rub > 10000 AND plase_of_prev_work != 'Moscow';
---c)    Названиях  и расположении нанимателей, в названии которых присутствует слово “завод” и имеющих льготы. Вывод результатов организовать по названию и убыванию льгот.
+SELECT name, location 
+FROM employer 
+WHERE benefit_percentage < 8;
+--b)    профессиях, имеющих стоиомость найма более 10000руб. 
+--для которых Москва не была местом прежней работы;
+SELECT name_prof, cost_rub, plase_of_prev_work 
+FROM profession 
+WHERE cost_rub > 10000 AND plase_of_prev_work != 'Moscow';
+--c)    Названиях  и расположении нанимателей, в названии которых присутствует слово “завод” и имеющих льготы. 
+--Вывод результатов организовать по названию и убыванию льгот.
 SELECT name, location FROM employer WHERE (name LIKE '%Zavod%') AND benefit_percentage >0;
 ```
 6.	Для каждого трудового договора вывести следующие данные:
 ```sql
 --a)    название нанимателя, дату, название бюро найма;
-SELECT employment_contract.contract_number,employment_contract.hiring_date, employer.name, hire_office.number_office
+SELECT employment_contract.contract_number,employment_contract.hiring_date, 
+	employer.name, hire_office.number_office
 FROM employment_contract, employer, hire_office
-WHERE employment_contract.employer_id = employer.id_empl AND employment_contract.hire_office_id = hire_office.id_office;
+WHERE employment_contract.employer_id = employer.id_empl AND 
+	employment_contract.hire_office_id = hire_office.id_office;
 
 --b)    дату, название бюро найма, название и количество заказанных профессий.
-SELECT employment_contract.hiring_date,  hire_office.number_office, profession.name_prof, employment_contract.quantity
+SELECT employment_contract.hiring_date,  hire_office.number_office, 
+	profession.name_prof, employment_contract.quantity
 FROM employment_contract, hire_office, profession
-WHERE employment_contract.profession_id = profession.id_prof AND employment_contract.hire_office_id = hire_office.id_office;
+WHERE employment_contract.profession_id = profession.id_prof AND 
+	employment_contract.hire_office_id = hire_office.id_office;
 ```
 
 7.	Определить:
 
 ```sql
---a)    дату, номер договора, название предприятий заказавших автоводителей или сделавших заказ на общую сумму не менее 14000руб.
+--a)    дату, номер договора, название предприятий 
+--заказавших автоводителей или сделавших заказ на общую сумму не менее 14000руб.
 SELECT employment_contract.contract_number, employment_contract.hiring_date, employer.name
 FROM employment_contract, employer
-WHERE employment_contract.employer_id = employer.id_empl AND (employment_contract.profession_id = 006 OR employment_contract.payment_rub >= 14000);
+WHERE employment_contract.employer_id = employer.id_empl AND 
+	(employment_contract.profession_id = 006 OR 
+	employment_contract.payment_rub >= 14000);
 
---b)	номера тех бюро найма вместе с адресами, которые предоставляли услуги организациям со льготами менее 7% после февраля месяца;
+--b)	номера тех бюро найма вместе с адресами, 
+--которые предоставляли услуги организациям со льготами менее 7% после февраля месяца;
 SELECT DISTINCT hire_office.number_office, hire_office.office_address
 FROM hire_office, employment_contract, employer
-WHERE employment_contract.hire_office_id = hire_office.id_office AND employment_contract.employer_id = employer.id_empl AND
-	employer.benefit_percentage < 7 AND (employment_contract.hiring_date NOT IN ('January', 'February'));
+WHERE employment_contract.hire_office_id = hire_office.id_office AND 
+	employment_contract.employer_id = employer.id_empl AND
+	employer.benefit_percentage < 7 AND 
+	(employment_contract.hiring_date NOT IN ('January', 'February'));
 
---c)	предприятия, расположенные в любом городе, кроме Москвы, которые пользовались услугами бюро найма с платой за услуги более 3%;
+--c)	предприятия, расположенные в любом городе, кроме Москвы, 
+--которые пользовались услугами бюро найма с платой за услуги более 3%;
 SELECT DISTINCT employer.name
 FROM employer, hire_office, employment_contract
-WHERE employment_contract.hire_office_id = hire_office.id_office AND employment_contract.employer_id = employer.id_empl AND 
+WHERE employment_contract.hire_office_id = hire_office.id_office AND 
+	employment_contract.employer_id = employer.id_empl AND 
 	hire_office.service_fee_percentage > 3 AND employer.location != 'Moscow';
 
---d)	данные по заказу специальностей, у которых не изменился адрес работы. Включить данные о стоимости и отсортировать по возрастанию. 
+--d)	данные по заказу специальностей, у которых не изменился адрес работы. 
+--Включить данные о стоимости и отсортировать по возрастанию. 
 SELECT employer, employment_contract.payment_rub
 FROM employment_contract, employer, profession
-WHERE employment_contract.employer_id = employer.id_empl AND employment_contract.profession_id = profession.id_prof AND
+WHERE employment_contract.employer_id = employer.id_empl AND
+	employment_contract.profession_id = profession.id_prof AND
 	employer.location = profession.plase_of_prev_work
 ORDER BY payment_rub;
 ```
