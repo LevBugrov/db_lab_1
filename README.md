@@ -41,7 +41,7 @@ payment_rub INTEGER NOT NULL
 ```
 2.	Ввести в ранее созданные таблицы конкретные данные (см. прил. 1). Использовать скрипт-файл из операторов INSERT или вспомогательную утилиту .
 
-sql```
+```sql
 INSERT INTO employer
 (id_empl ,name, location, benefit_percentage)
 VALUES
