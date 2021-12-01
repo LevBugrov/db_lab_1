@@ -38,9 +38,10 @@ profession_id INTEGER REFERENCES profession (id_prof),
 quantity INTEGER NOT NULL,
 payment_rub INTEGER NOT NULL
 );
-'''
+```
 2.	Ввести в ранее созданные таблицы конкретные данные (см. прил. 1). Использовать скрипт-файл из операторов INSERT или вспомогательную утилиту .
-sql'''
+
+sql```
 INSERT INTO employer
 (id_empl ,name, location, benefit_percentage)
 VALUES
@@ -91,4 +92,4 @@ VALUES
 (00141, 'June', 003, 005, 002, 1, 15000),
 (00142, 'July', 004, 002, 006, 1, 25000),
 (00143, 'September', 002, 002, 007, 2, 34000);
-'''
+```
