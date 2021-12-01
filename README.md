@@ -139,37 +139,39 @@ SELECT * FROM employment_contract;
 (5 rows)
 
 
- id_prof |   name_prof    | cost_rub | number_of_jobs | plase_of_prev_work
----------+----------------+----------+----------------+--------------------
-       1 | roofer         |    10000 |              7 | Saransk
-       2 | Locksmith      |    15000 |              6 | Kremenchug
-       3 | Accountant     |    25000 |             10 | Moscow
-       4 | Milling cutter |    20000 |              7 | Odessa
-       5 | Programmer     |    40000 |              8 | Kiev
-       6 | Driver         |    25000 |              3 | Primorsk
-       7 | Grinder        |    17000 |              5 | Odessa
+|  id_prof |   name_prof    | cost_rub | number_of_jobs | plase_of_prev_work
+| ---------|----------------|----------|----------------|--------------------
+|        1 | roofer         |    10000 |              7 | Saransk
+|        2 | Locksmith      |    15000 |              6 | Kremenchug
+|        3 | Accountant     |    25000 |             10 | Moscow
+|        4 | Milling cutter |    20000 |              7 | Odessa
+|        5 | Programmer     |    40000 |              8 | Kiev
+|        6 | Driver         |    25000 |              3 | Primorsk
+|        7 | Grinder        |    17000 |              5 | Odessa
+
 (7 rows)
 
 
- contract_number | hiring_date | employer_id | hire_office_id | profession_id | quantity | payment_rub
------------------+-------------+-------------+----------------+---------------+----------+-------------
-             127 | January     |           3 |              4 |             6 |        1 |       25000
-             128 | February    |           6 |              2 |             1 |        2 |       20000
-             129 | March       |           1 |              3 |             4 |        1 |       20000
-             130 | April       |           2 |              1 |             7 |        2 |       34000
-             131 | April       |           4 |              4 |             6 |        1 |       25000
-             132 | April       |           6 |              4 |             1 |        1 |       10000
-             133 | May         |           5 |              2 |             5 |        3 |      120000
-             134 | May         |           3 |              3 |             2 |        3 |       45000
-             135 | May         |           3 |              4 |             1 |        1 |       10000
-             136 | June        |           4 |              1 |             3 |        4 |      100000
-             137 | June        |           1 |              2 |             2 |        3 |       45000
-             138 | June        |           1 |              3 |             7 |        1 |       17000
-             139 | June        |           5 |              4 |             1 |        2 |       20000
-             140 | June        |           3 |              5 |             2 |        1 |       15000
-             141 | June        |           3 |              5 |             2 |        1 |       15000
-             142 | July        |           4 |              2 |             6 |        1 |       25000
-             143 | September   |           2 |              2 |             7 |        2 |       34000
+|  contract_number | hiring_date | employer_id | hire_office_id | profession_id | quantity | payment_rub
+| -----------------|-------------|-------------|----------------|---------------|----------|-------------
+|              127 | January     |           3 |              4 |             6 |        1 |       25000
+|              128 | February    |           6 |              2 |             1 |        2 |       20000
+|              129 | March       |           1 |              3 |             4 |        1 |       20000
+|              130 | April       |           2 |              1 |             7 |        2 |       34000
+|              131 | April       |           4 |              4 |             6 |        1 |       25000
+|              132 | April       |           6 |              4 |             1 |        1 |       10000
+|              133 | May         |           5 |              2 |             5 |        3 |      120000
+|              134 | May         |           3 |              3 |             2 |        3 |       45000
+|              135 | May         |           3 |              4 |             1 |        1 |       10000
+|              136 | June        |           4 |              1 |             3 |        4 |      100000
+|              137 | June        |           1 |              2 |             2 |        3 |       45000
+|              138 | June        |           1 |              3 |             7 |        1 |       17000
+|              139 | June        |           5 |              4 |             1 |        2 |       20000
+|              140 | June        |           3 |              5 |             2 |        1 |       15000
+|              141 | June        |           3 |              5 |             2 |        1 |       15000
+|              142 | July        |           4 |              2 |             6 |        1 |       25000
+|              143 | September   |           2 |              2 |             7 |        2 |       34000
+
 (17 rows)
 
 
