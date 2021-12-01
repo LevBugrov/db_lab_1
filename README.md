@@ -235,8 +235,37 @@ WHERE cost_rub > 10000 AND plase_of_prev_work != 'Moscow';
 --c)    Названиях  и расположении нанимателей, 
 --в названии которых присутствует слово “завод” и имеющих льготы. 
 --Вывод результатов организовать по названию и убыванию льгот.
-SELECT name, location FROM employer WHERE (name LIKE '%Zavod%') AND benefit_percentage >0;
+SELECT name, location 
+FROM employer 
+WHERE (name LIKE '%Zavod%') AND benefit_percentage >0;
 ```
+|          name          |  location
+|------------------------|------------
+| Horns and hoofs        | Primorsk
+| Stankostroitelny Zavod | Odessa
+| KINAP                  | Odessa
+| KRAZ                   | Kremenchug
+
+(4 rows)
+
+
+|   name_prof    | cost_rub | plase_of_prev_work
+|----------------|----------|--------------------
+| Locksmith      |    15000 | Kremenchug
+| Milling cutter |    20000 | Odessa
+| Programmer     |    40000 | Kiev
+| Driver         |    25000 | Primorsk
+| Grinder        |    17000 | Odessa
+
+(5 rows)
+
+
+ |         name          | location
+-|-----------------------|----------
+ |Stankostroitelny Zavod | Odessa
+
+(1 row)
+
 6.	Для каждого трудового договора вывести следующие данные:
 ```sql
 --a)    название нанимателя, дату, название бюро найма;
@@ -245,7 +274,32 @@ SELECT employment_contract.contract_number,employment_contract.hiring_date,
 FROM employment_contract, employer, hire_office
 WHERE employment_contract.employer_id = employer.id_empl AND 
 	employment_contract.hire_office_id = hire_office.id_office;
+```
+| contract_number | hiring_date |          name          | number_office
+|-----------------|-------------|------------------------|---------------
+|             127 | January     | Stankostroitelny Zavod | N6
+|             128 | February    | p/y 12687-u            | N4
+|             129 | March       | Horns and hoofs        | N12
+|             130 | April       | GAZ                    | N5
+|             131 | April       | KINAP                  | N6
+|             132 | April       | p/y 12687-u            | N6
+|             133 | May         | KRAZ                   | N4
+|             134 | May         | Stankostroitelny Zavod | N12
+|             135 | May         | Stankostroitelny Zavod | N6
+|             136 | June        | KINAP                  | N5
+|             137 | June        | Horns and hoofs        | N4
+|             138 | June        | Horns and hoofs        | N12
+|             139 | June        | KRAZ                   | N6
+|             140 | June        | Stankostroitelny Zavod | N8
+|             141 | June        | Stankostroitelny Zavod | N8
+|             142 | July        | KINAP                  | N4
+|             143 | September   | GAZ                    | N4
 
+(17 rows)
+
+
+6.	Для каждого трудового договора вывести следующие данные:
+```sql
 --b)    дату, название бюро найма, название и количество заказанных профессий.
 SELECT employment_contract.hiring_date,  hire_office.number_office, 
 	profession.name_prof, employment_contract.quantity
@@ -253,9 +307,30 @@ FROM employment_contract, hire_office, profession
 WHERE employment_contract.profession_id = profession.id_prof AND 
 	employment_contract.hire_office_id = hire_office.id_office;
 ```
+| hiring_date | number_office |   name_prof    | quantity
+|-------------|---------------|----------------|----------
+| January     | N6            | Driver         |        1
+| February    | N4            | roofer         |        2
+| March       | N12           | Milling cutter |        1
+| April       | N5            | Grinder        |        2
+| April       | N6            | Driver         |        1
+| April       | N6            | roofer         |        1
+| May         | N4            | Programmer     |        3
+| May         | N12           | Locksmith      |        3
+| May         | N6            | roofer         |        1
+| June        | N5            | Accountant     |        4
+| June        | N4            | Locksmith      |        3
+| June        | N12           | Grinder        |        1
+| June        | N6            | roofer         |        2
+| June        | N8            | Locksmith      |        1
+| June        | N8            | Locksmith      |        1
+| July        | N4            | Driver         |        1
+| September   | N4            | Grinder        |        2
+
+(17 rows)
+
 
 7.	Определить:
-
 ```sql
 --a)    дату, номер договора, название предприятий 
 --заказавших автоводителей или сделавших заказ на общую сумму не менее 14000руб.
@@ -264,7 +339,30 @@ FROM employment_contract, employer
 WHERE employment_contract.employer_id = employer.id_empl AND 
 	(employment_contract.profession_id = 006 OR 
 	employment_contract.payment_rub >= 14000);
+```
+| contract_number | hiring_date |          name
+|-----------------|-------------|------------------------
+|             127 | January     | Stankostroitelny Zavod
+|             128 | February    | p/y 12687-u
+|             129 | March       | Horns and hoofs
+|             130 | April       | GAZ
+|             131 | April       | KINAP
+|             133 | May         | KRAZ
+|             134 | May         | Stankostroitelny Zavod
+|             136 | June        | KINAP
+|             137 | June        | Horns and hoofs
+|             138 | June        | Horns and hoofs
+|             139 | June        | KRAZ
+|             140 | June        | Stankostroitelny Zavod
+|             141 | June        | Stankostroitelny Zavod
+|             142 | July        | KINAP
+|             143 | September   | GAZ
 
+(15 rows)
+
+
+7.	Определить:
+```sql
 --b)	номера тех бюро найма вместе с адресами, 
 --которые предоставляли услуги организациям со льготами менее 7% после февраля месяца;
 SELECT DISTINCT hire_office.number_office, hire_office.office_address
@@ -273,7 +371,20 @@ WHERE employment_contract.hire_office_id = hire_office.id_office AND
 	employment_contract.employer_id = employer.id_empl AND
 	employer.benefit_percentage < 7 AND 
 	(employment_contract.hiring_date NOT IN ('January', 'February'));
+```
+| number_office | office_address
+|---------------|----------------
+| N8            | Odessa
+| N6            | Novgorod
+| N12           | Kiev
+| N4            | Moscow
+| N5            | Novgorod
 
+(5 rows)
+
+
+7.	Определить:
+```sql
 --c)	предприятия, расположенные в любом городе, кроме Москвы, 
 --которые пользовались услугами бюро найма с платой за услуги более 3%;
 SELECT DISTINCT employer.name
@@ -281,7 +392,19 @@ FROM employer, hire_office, employment_contract
 WHERE employment_contract.hire_office_id = hire_office.id_office AND 
 	employment_contract.employer_id = employer.id_empl AND 
 	hire_office.service_fee_percentage > 3 AND employer.location != 'Moscow';
+```
+|          name
+|------------------------
+| Stankostroitelny Zavod
+| Horns and hoofs
+| GAZ
+| KINAP
 
+(4 rows)
+
+
+7.	Определить:
+```sql
 --d)	данные по заказу специальностей, у которых не изменился адрес работы. 
 --Включить данные о стоимости и отсортировать по возрастанию. 
 SELECT employer, employment_contract.payment_rub
@@ -291,6 +414,13 @@ WHERE employment_contract.employer_id = employer.id_empl AND
 	employer.location = profession.plase_of_prev_work
 ORDER BY payment_rub;
 ```
+|            employer             | payment_rub
+|---------------------------------|-------------
+| (6,"p/y 12687-u",Saransk,10.00) |       10000
+| (6,"p/y 12687-u",Saransk,10.00) |       20000
+
+(2 rows)
+
 
 ```sql
 ```
