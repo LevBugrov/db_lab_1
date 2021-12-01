@@ -116,24 +116,26 @@ SELECT * FROM employment_contract;
 ```
 
 
- id_empl |          name          |  location   | benefit_percentage
----------+------------------------+-------------+--------------------
-       1 | Horns and hoofs        | Primorsk    |               0.00
-       2 | GAZ                    | N. Novgorod |              20.00
-       3 | Stankostroitelny Zavod | Odessa      |               2.00
-       4 | KINAP                  | Odessa      |               2.00
-       5 | KRAZ                   | Kremenchug  |               2.00
-       6 | p/y 12687-u            | Saransk     |              10.00
+|  id_empl |          name          |  location   | benefit_percentage
+| ---------+------------------------+-------------+--------------------
+|        1 | Horns and hoofs        | Primorsk    |               0.00
+|        2 | GAZ                    | N. Novgorod |              20.00
+|        3 | Stankostroitelny Zavod | Odessa      |               2.00
+|        4 | KINAP                  | Odessa      |               2.00
+|        5 | KRAZ                   | Kremenchug  |               2.00
+|        6 | p/y 12687-u            | Saransk     |              10.00
+
 (6 rows)
 
 
- id_office | number_office | office_address | service_fee_percentage
------------+---------------+----------------+------------------------
-         1 | N5            | Novgorod       |                   4.00
-         2 | N4            | Moscow         |                   3.00
-         3 | N12           | Kiev           |                  11.00
-         4 | N6            | Novgorod       |                   3.00
-         5 | N8            | Odessa         |                   9.00
+|  id_office | number_office | office_address | service_fee_percentage
+| -----------+---------------+----------------+------------------------
+|          1 | N5            | Novgorod       |                   4.00
+|          2 | N4            | Moscow         |                   3.00
+|          3 | N12           | Kiev           |                  11.00
+|          4 | N6            | Novgorod       |                   3.00
+|          5 | N8            | Odessa         |                   9.00
+
 (5 rows)
 
 
