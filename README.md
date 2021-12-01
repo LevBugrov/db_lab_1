@@ -260,9 +260,9 @@ WHERE (name LIKE '%Zavod%') AND benefit_percentage >0;
 (5 rows)
 
 
- |         name          | location
--|-----------------------|----------
- |Stankostroitelny Zavod | Odessa
+|         name          | location
+|-----------------------|----------
+|Stankostroitelny Zavod | Odessa
 
 (1 row)
 
@@ -407,17 +407,17 @@ WHERE employment_contract.hire_office_id = hire_office.id_office AND
 ```sql
 --d)	данные по заказу специальностей, у которых не изменился адрес работы. 
 --Включить данные о стоимости и отсортировать по возрастанию. 
-SELECT employer, employment_contract.payment_rub
+SELECT name_prof, employer.name, hiring_date, employment_contract.payment_rub, location
 FROM employment_contract, employer, profession
-WHERE employment_contract.employer_id = employer.id_empl AND
+WHERE employment_contract.employer_id = employer.id_empl AND 
 	employment_contract.profession_id = profession.id_prof AND
 	employer.location = profession.plase_of_prev_work
 ORDER BY payment_rub;
 ```
-|            employer             | payment_rub
-|---------------------------------|-------------
-| (6,"p/y 12687-u",Saransk,10.00) |       10000
-| (6,"p/y 12687-u",Saransk,10.00) |       20000
+| name_prof |    name     | hiring_date | payment_rub | location
+|-----------|-------------|-------------|-------------|----------
+| roofer    | p/y 12687-u | April       |       10000 | Saransk
+| roofer    | p/y 12687-u | February    |       20000 | Saransk
 
 (2 rows)
 
