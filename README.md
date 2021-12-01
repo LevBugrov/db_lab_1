@@ -181,11 +181,46 @@ SELECT * FROM employment_contract;
 SELECT name, location 
 FROM employer;
 --b)    всех номеров бюро найма;
-SELECT id_office FROM hire_office;
+SELECT number_office FROM hire_office;
 --c)    всех различных предоставленных профессий вместе с их количеством.
 SELECT name_prof, number_of_jobs 
 FROM profession;
 ```
+|          name          |  location
+|------------------------|-------------
+| Horns and hoofs        | Primorsk
+| GAZ                    | N. Novgorod
+| Stankostroitelny Zavod | Odessa
+| KINAP                  | Odessa
+| KRAZ                   | Kremenchug
+| p/y 12687-u            | Saransk
+
+(6 rows)
+
+
+| number_office
+|---------------
+| N5
+| N4
+| N12
+| N6
+| N8
+
+(5 rows)
+
+
+|   name_prof    | number_of_jobs
+|----------------|----------------
+| roofer         |              7
+| Locksmith      |              6
+| Accountant     |             10
+| Milling cutter |              7
+| Programmer     |              8
+| Driver         |              3
+| Grinder        |              5
+
+(7 rows)
+
 5.	Создать запросы для получения инорфмации о:
 ```sql
 --a)    названии и месте расположения нанимателей, имеющих льготу менее 8%;
@@ -197,7 +232,8 @@ WHERE benefit_percentage < 8;
 SELECT name_prof, cost_rub, plase_of_prev_work 
 FROM profession 
 WHERE cost_rub > 10000 AND plase_of_prev_work != 'Moscow';
---c)    Названиях  и расположении нанимателей, в названии которых присутствует слово “завод” и имеющих льготы. 
+--c)    Названиях  и расположении нанимателей, 
+--в названии которых присутствует слово “завод” и имеющих льготы. 
 --Вывод результатов организовать по названию и убыванию льгот.
 SELECT name, location FROM employer WHERE (name LIKE '%Zavod%') AND benefit_percentage >0;
 ```
