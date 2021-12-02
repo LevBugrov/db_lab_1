@@ -616,10 +616,54 @@ WHERE employer.location != hire_office.office_address
 
 11.	Используя операции ALL-ANY реализовать следующие запросы:
 ```sql
-c)	c)	предприятия, расположенные в любом городе, кроме Москвы, которые пользовались услугами бюро найма с платой за услуги более 3%;
+--c)	предприятия, расположенные в любом городе, кроме Москвы, которые пользовались услугами бюро найма с платой за услуги более 3%;
+SELECT DISTINCT employer.name
+FROM employment_contract
+JOIN employer ON id_empl = employer_id
+JOIN hire_office ON id_office = hire_office_id
+WHERE hire_office.service_fee_percentage > 3 AND employer.location != 'Moscow';
 ```
 
 
+
+11.	Используя операции ALL-ANY реализовать следующие запросы:
 ```sql
-d)	найти профессию с максимальной стоимостью среди тех, которые заказывали предприятия из Н.Новгрода.
+--d)	найти профессию с максимальной стоимостью среди тех, которые заказывали предприятия из Н.Новгрода.
+SELECT DISTINCT employer.name, cost_rub
+FROM employment_contract
+JOIN employer ON id_empl = employer_id
+JOIN hire_office ON id_office = hire_office_id
+JOIN profession ON id_prof = profession_id
+WHERE location = 'N. Novgorod' AND cost_rub >= ALL(
+SELECT cost_rub
+FROM employer
+JOIN employment_contract ON id_empl = employer_id
+JOIN profession ON id_prof = profession_id
+WHERE location = 'N. Novgorod'
+);
 ```
+| name | cost_rub
+|------|----------
+| GAZ  |    17000
+
+(1 row)
+
+
+12.	Используя операцию UNION получить места расположения предприятий-заказчиков и бюро найма.
+```sql
+SELECT location 
+FROM employer
+UNION SELECT office_address FROM hire_office;
+```
+|  location
+|-------------
+| Kiev
+| Moscow
+| Primorsk
+| N. Novgorod
+| Odessa
+| Saransk
+| Novgorod
+| Kremenchug
+ 
+(8 rows)
