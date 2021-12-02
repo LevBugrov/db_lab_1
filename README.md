@@ -616,7 +616,8 @@ WHERE employer.location != hire_office.office_address
 
 11.	Используя операции ALL-ANY реализовать следующие запросы:
 ```sql
---c)	предприятия, расположенные в любом городе, кроме Москвы, которые пользовались услугами бюро найма с платой за услуги более 3%;
+--c)	предприятия, расположенные в любом городе, кроме Москвы, 
+--которые пользовались услугами бюро найма с платой за услуги более 3%;
 SELECT DISTINCT employer.name
 FROM employment_contract
 JOIN employer ON id_empl = employer_id
