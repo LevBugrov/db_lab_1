@@ -695,13 +695,44 @@ UNION SELECT office_address FROM hire_office;
 ```
 ```sql
 --b)	найти суммарную стоимость всех заключенных договоров;
+SELECT sum(payment_rub)
+FROM employment_contract;
 ```
+|  sum
+|--------
+| 555400
+ 
+(1 row)
+
+
 ```sql
 --c)	определить число различных профессий, заказанных до января предприятиями Н.Новгорода;
+SELECT count(DISTINCT profession_id)
+FROM employment_contract
+JOIN employer on id_empl = employer_id
+WHERE location = 'N. Novgorod';
 ```
+| count
+|-------
+|     3
+     
+(1 row)
+
+
 ```sql
 --d)	найти среднее число заказываемых вакансий для профессий со стоимостью более 20000.
+SELECT avg(quantity)
+FROM profession
+JOIN employment_contract ON id_prof = profession_id
+WHERE cost_rub > 20000;
 ```
+|        avg
+|--------------------
+| 2.0000000000000000
+
+(1 row)
+
+
 15.	Используя средства группировки реализовать следующие запросы:
 ```sql
 --a)	получить для каждой пары “предприятие-бюро найма” 
