@@ -421,9 +421,95 @@ ORDER BY payment_rub;
 
 (2 rows)
 
+8.	Создать запрос для модификации всех значений столбца 
+	с суммарной величиной оплаты заказа, 
+	чтобы он содержал истинную сумму, оплачиваемую нанимателем ( с учетом льгот). 
+	Вывести новые значения.
 
 ```sql
+UPDATE employment_contract 
+SET payment_rub = payment_rub - payment_rub / 100*benefit_percentage 
+FROM employer
+WHERE employer_id = id_empl;
+
+SELECT * FROM employment_contract;
 ```
+| contract_number | hiring_date | employer_id | hire_office_id | profession_id | quantity | payment_rub
+|-----------------|-------------|-------------|----------------|---------------|----------|-------------
+|             127 | January     |           3 |              4 |             6 |        1 |       24500
+|             128 | February    |           6 |              2 |             1 |        2 |       18000
+|             129 | March       |           1 |              3 |             4 |        1 |       20000
+|             130 | April       |           2 |              1 |             7 |        2 |       27200
+|             131 | April       |           4 |              4 |             6 |        1 |       24500
+|             132 | April       |           6 |              4 |             1 |        1 |        9000
+|             133 | May         |           5 |              2 |             5 |        3 |      117600
+|             134 | May         |           3 |              3 |             2 |        3 |       44100
+|             135 | May         |           3 |              4 |             1 |        1 |        9800
+|             136 | June        |           4 |              1 |             3 |        4 |       98000
+|             137 | June        |           1 |              2 |             2 |        3 |       45000
+|             138 | June        |           1 |              3 |             7 |        1 |       17000
+|             139 | June        |           5 |              4 |             1 |        2 |       19600
+|             140 | June        |           3 |              5 |             2 |        1 |       14700
+|             141 | June        |           3 |              5 |             2 |        1 |       14700
+|             142 | July        |           4 |              2 |             6 |        1 |       24500
+|             143 | September   |           2 |              2 |             7 |        2 |       27200
+
+(17 rows)
+
+
+9.	Расширить таблицу с данными о заказах столбцом, содержащим величину платы за услуги, 
+	получаемую бюро найма. 
+	Создать запрос для ввода конкретных значений во все строки таблицы покупок.
+```sql
+ALTER TABLE employment_contract ADD COLUMN service_fee  INTEGER;
+
+UPDATE employment_contract SET service_fee = service_fee_percentage * payment_rub/100 FROM hire_office 
+WHERE hire_office_id = id_office;
+
+SELECT * FROM employment_contract;
+```
+| contract_number | hiring_date | employer_id | hire_office_id | profession_id | quantity | payment_rub | service_fee
+|-----------------|-------------|-------------|----------------|---------------|----------|-------------|-------------
+|             127 | January     |           3 |              4 |             6 |        1 |       24500 |         735
+|             128 | February    |           6 |              2 |             1 |        2 |       18000 |         540
+|             129 | March       |           1 |              3 |             4 |        1 |       20000 |        2200
+|             130 | April       |           2 |              1 |             7 |        2 |       27200 |        1088
+|             131 | April       |           4 |              4 |             6 |        1 |       24500 |         735
+|             132 | April       |           6 |              4 |             1 |        1 |        9000 |         270
+|             133 | May         |           5 |              2 |             5 |        3 |      117600 |        3528
+|             134 | May         |           3 |              3 |             2 |        3 |       44100 |        4851
+|             135 | May         |           3 |              4 |             1 |        1 |        9800 |         294
+|             136 | June        |           4 |              1 |             3 |        4 |       98000 |        3920
+|             137 | June        |           1 |              2 |             2 |        3 |       45000 |        1350
+|             138 | June        |           1 |              3 |             7 |        1 |       17000 |        1870
+|             139 | June        |           5 |              4 |             1 |        2 |       19600 |         588
+|             140 | June        |           3 |              5 |             2 |        1 |       14700 |        1323
+|             141 | June        |           3 |              5 |             2 |        1 |       14700 |        1323
+|             142 | July        |           4 |              2 |             6 |        1 |       24500 |         735
+|             143 | September   |           2 |              2 |             7 |        2 |       27200 |         816
+
+(17 rows)
+
+
+10.	Используя операцию IN (NOT IN)  реализовать следующие запросы:
+```sql
+--a)	определить бюро найма, которые заключали договора с нанимателями из Н.Новгрода;
+SELECT DISTINCT id_office, number_office
+FROM employment_contract
+JOIN employer ON id_empl = employer_id
+JOIN hire_office ON id_office = hire_office_id
+WHERE location IN ('N. Novgorod');
+```
+| id_office | number_office
+|-----------|---------------
+|         1 | N5
+|         2 | N4
+
+(2 rows)
+
 
 ```sql
+--b)	найти профессии, которые не требовались нанимателям с размером льгот менее 10%;
+
 ```
+c)	запросы заданий 7.а, 7.b.
