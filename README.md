@@ -507,9 +507,115 @@ WHERE location IN ('N. Novgorod');
 
 (2 rows)
 
-
+10.	Используя операцию IN (NOT IN)  реализовать следующие запросы:
 ```sql
 --b)	найти профессии, которые не требовались нанимателям с размером льгот менее 10%;
-
+SELECT id_prof, name_prof
+FROM profession
+WHERE id_prof NOT IN(  
+SELECT DISTINCT id_prof--, name_prof, contract_number, employer_id, benefit_percentage
+FROM profession
+JOIN employment_contract ON id_prof = profession_id
+JOIN employer ON id_empl = employer_id
+WHERE benefit_percentage < 10
+--ORDER BY contract_number;
+);
+--если убрать комментарии и запустить внутренний SELECT.
+--то можно увидеть что все профессии требовались нанимателям
 ```
-c)	запросы заданий 7.а, 7.b.
+| id_prof | name_prof
+|---------|-----------
+
+(0 rows)
+
+
+10.	Используя операцию IN (NOT IN)  реализовать запрос задания 7.а:
+```sql
+SELECT contract_number, hiring_date, employer.name
+FROM employment_contract, employer
+WHERE employment_contract.employer_id = employer.id_empl
+	AND (profession_id IN (006) 
+	OR payment_rub >= 14000);
+```
+| contract_number | hiring_date |          name
+|-----------------|-------------|------------------------
+|             127 | January     | Stankostroitelny Zavod
+|             128 | February    | p/y 12687-u
+|             129 | March       | Horns and hoofs
+|             130 | April       | GAZ
+|             131 | April       | KINAP
+|             133 | May         | KRAZ
+|             134 | May         | Stankostroitelny Zavod
+|             136 | June        | KINAP
+|             137 | June        | Horns and hoofs
+|             138 | June        | Horns and hoofs
+|             139 | June        | KRAZ
+|             140 | June        | Stankostroitelny Zavod
+|             141 | June        | Stankostroitelny Zavod
+|             142 | July        | KINAP
+|             143 | September   | GAZ
+
+(15 rows)
+
+
+10.	Используя операцию IN (NOT IN)  реализовать запрос задания 7.b:
+```sql
+SELECT DISTINCT hire_office.number_office, hire_office.office_address
+FROM hire_office, employment_contract, employer
+WHERE employment_contract.hire_office_id = hire_office.id_office AND employment_contract.employer_id = employer.id_empl AND
+	employer.benefit_percentage < 7 AND (employment_contract.hiring_date NOT IN ('January', 'February'));
+```
+| number_office | office_address
+|---------------|----------------
+| N12           | Kiev
+| N4            | Moscow
+| N5            | Novgorod
+| N6            | Novgorod
+| N8            | Odessa
+
+(5 rows)
+
+
+11.	Используя операции ALL-ANY реализовать следующие запросы:
+```sql
+--a)	на рабочих каких профессий заключались договора с максимальным количеством рабочих мест;
+SELECT profession.name_prof, number_of_jobs
+FROM employment_contract 
+JOIN profession ON id_prof = profession_id
+WHERE number_of_jobs >= ALL (
+SELECT number_of_jobs 
+FROM profession
+);
+```
+| name_prof  | number_of_jobs
+|------------|----------------
+| Accountant |             10
+ 
+(1 row)
+
+
+11.	Используя операции ALL-ANY реализовать следующие запросы:
+```sql
+--b)	найти нанимателя, заключившего самый дорогой договор с бюро найма из чужого города;
+SELECT employer.name
+FROM employer
+JOIN employment_contract ON id_empl = employer_id
+WHERE payment_rub >= ALL (
+SELECT payment_rub
+FROM employment_contract
+JOIN employer ON id_empl = employer_id
+JOIN hire_office ON id_office = hire_office_id
+WHERE employer.location != hire_office.office_address
+```
+ name
+------
+ KRAZ
+ 
+(1 row)
+
+```sql
+c)	запрос задания 7.c;
+```
+```sql
+d)	найти профессию с максимальной стоимостью среди тех, которые заказывали предприятия из Н.Новгрода.
+```
