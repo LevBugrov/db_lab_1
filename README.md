@@ -4,39 +4,63 @@
 CREATE TABLE employer
 (
     id_empl INTEGER PRIMARY KEY,
+    -- Идентификатор integer, обязательно должен быть, является внещним ключем.
     name TEXT NOT NULL,
+    -- Используем тесктовый тип данных для хранения названия предприятия
     location TEXT NOT NULL,
-    benefit_percentage numeric(5,2) NOT NULL
+    -- Используем тесктовый тип данных для хранения города в котором находится предприятие
+    benefit_percentage numeric(5,2) CHECK (benefit_percentage <= 100 AND benefit_percentage >= 0)
+    -- используем тип numeric для хранения скидки и используем только 2 знака после запятой,
+	-- потому что больше точность не имеет смысла.
+	-- CHECK обязывает записывать в данное поле только значения от 0% до 100%.
 );
 
 CREATE TABLE hire_office
 (
     id_office INTEGER PRIMARY KEY,
+	-- Идентификатор integer, обязательно должен быть, является внещним ключем.
     number_office TEXT NOT NULL,
+	-- Используем тесктовый тип данных для хранения номера оффиса
     office_address TEXT NOT NULL,
-    service_fee_percentage numeric(5,2) NOT NULL
+	-- Используем тесктовый тип данных для хранения города в котором находится офис
+    service_fee_percentage numeric(5,2) CHECK (service_fee_percentage <= 100 AND service_fee_percentage >= 0)
+	-- используем тип numeric для хранения платы за обслуживания и используем только 2 знака после запятой,
+	-- потому что больше точность не имеет смысла.
+	-- CHECK обязывает записывать в данное поле только значения от 0% до 100%.
 );
 
 CREATE TABLE profession
 (
     id_prof INTEGER PRIMARY KEY,
+	-- Идентификатор integer, обязательно должен быть, является внещним ключем.
     name_prof TEXT NOT NULL,
+	-- Используем тесктовый тип данных для хранения названия профессии
     cost_rub INTEGER NOT NULL,
+	--используем тип INTEGER для хранения зарплаты
     number_of_jobs INTEGER NOT NULL,
+	--используем тип INTEGER для хранения количесва вакансий
     plase_of_prev_work TEXT
+	-- Используем тесктовый тип данных для хранения города предидущего места работы
+	-- нет ограничения NOT NULL потому что предидущего места работы может и не быть
+	
 );
 
 CREATE TABLE employment_contract
 (
-    contract_number INTEGER NOT NULL,
+    contract_number INTEGER PRIMARY KEY,
+	-- Идентификатор integer, обязательно должен быть, является внещним ключем.
     hiring_date TEXT NOT NULL,
-
+	--так как заносится только месяц используем текстовый тип данных для хранения даты
+	
     employer_id INTEGER REFERENCES employer (id_empl),
     hire_office_id INTEGER REFERENCES hire_office (id_office),
     profession_id INTEGER REFERENCES profession (id_prof),
+	--используем тот же тип что и в других таблицах и связываем их с внешними ключами
 
     quantity INTEGER NOT NULL,
+	--используем тип INTEGER для хранения количесва нанятых людей
     payment_rub INTEGER NOT NULL
+	--используем тип INTEGER для хранения платы за контракт
 );
 ```
 * CREATE TABLE
@@ -739,17 +763,13 @@ WHERE NOT EXISTS(
 SELECT DISTINCT employer_id FROM employment_contract as contract
 WHERE EXISTS (
 SELECT * FROM employment_contract 
-WHERE contract.payment_rub>10000);
+WHERE contract.payment_rub>10000 AND contract.hiring_date = 'April');
 ```
 | employer_id
 |-------------
-|           6
-|           1
-|           3
-|           5
 |           4
 |           2
-(6 rows)
+(2 rows)
 14.	Реализовать запросы с использованием аггрегатных функций:
 ```sql
 --a)	определить средний размер платы за услуги для тех бюро найма,
