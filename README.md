@@ -766,7 +766,21 @@ GROUP BY number_office, employer.name;
 ```sql
 --b)	найти для каждого бюро найма общее число договоров, 
 --вывести данные для тех бюро найма, где число договоров больше двух;
+SELECT * FROM
+(SELECT number_office, COUNT(contract_number) AS count_contract
+FROM employment_contract
+JOIN hire_office on hire_office_id = id_office
+GROUP BY number_office
+) AS tab
+WHERE count_contract >2;
 ```
+| number_office | count_contract
+|---------------|----------------
+| N12           |              3
+| N6            |              5
+| N4            |              5
+(3 rows)
+
 ```sql
 --c)	определить для каждого города, где размещаются предприятия, количество предприятий;
 SELECT location, COUNT(id_empl)
@@ -787,4 +801,24 @@ GROUP BY location;
 ```sql
 --d)	получить для каждого месяца и бюро найма суммарную величину стоимости договоров, 
 --вывести только те значения, где суммарная стоимость более 200000.
+SELECT * 
+FROM
+(SELECT number_office, hiring_date, SUM(payment_rub) AS sum_pay
+FROM employment_contract
+JOIN hire_office on hire_office_id = id_office
+GROUP BY number_office, hiring_date) AS tab
+WHERE sum_pay > 20000;
 ```
+| number_office | hiring_date | sum_pay
+|---------------|-------------|---------
+| N6            | April       |   33500
+| N8            | June        |   29400
+| N4            | July        |   24500
+| N4            | May         |  117600
+| N4            | September   |   27200
+| N4            | June        |   45000
+| N5            | June        |   98000
+| N6            | January     |   24500
+| N12           | May         |   44100
+| N5            | April       |   27200
+(10 rows)
