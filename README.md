@@ -737,14 +737,53 @@ WHERE cost_rub > 20000;
 ```sql
 --a)	получить для каждой пары “предприятие-бюро найма” 
 --суммарную величину стоимости заключенных договоров;
+SELECT number_office, employer.name, SUM(payment_rub)
+FROM employment_contract
+JOIN employer on id_empl = employer_id
+JOIN hire_office on hire_office_id = id_office
+GROUP BY number_office, employer.name;
 ```
+| number_office |          name          |  sum
+|---------------|------------------------|--------
+| N12           | Horns and hoofs        |  37000
+| N12           | Stankostroitelny Zavod |  44100
+| N4            | GAZ                    |  27200
+| N4            | Horns and hoofs        |  45000
+| N4            | KINAP                  |  24500
+| N4            | KRAZ                   | 117600
+| N4            | p/y 12687-u            |  18000
+| N5            | GAZ                    |  27200
+| N5            | KINAP                  |  98000
+| N6            | KINAP                  |  24500
+| N6            | KRAZ                   |  19600
+| N6            | p/y 12687-u            |   9000
+| N6            | Stankostroitelny Zavod |  34300
+| N8            | Stankostroitelny Zavod |  29400
+
+(14 rows)
+
+
 ```sql
 --b)	найти для каждого бюро найма общее число договоров, 
 --вывести данные для тех бюро найма, где число договоров больше двух;
 ```
 ```sql
 --c)	определить для каждого города, где размещаются предприятия, количество предприятий;
+SELECT location, COUNT(id_empl)
+FROM employer
+GROUP BY location;
 ```
+|  location   | count
+|-------------|-------
+| Odessa      |     2
+| Saransk     |     1
+| Primorsk    |     1
+| Kremenchug  |     1
+| N. Novgorod |     1
+
+(5 rows)
+
+
 ```sql
 --d)	получить для каждого месяца и бюро найма суммарную величину стоимости договоров, 
 --вывести только те значения, где суммарная стоимость более 200000.
