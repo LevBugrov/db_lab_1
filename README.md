@@ -616,15 +616,25 @@ WHERE employer.location != hire_office.office_address
 
 11.	Используя операции ALL-ANY реализовать следующие запросы:
 ```sql
---c)	предприятия, расположенные в любом городе, кроме Москвы, 
---которые пользовались услугами бюро найма с платой за услуги более 3%;
-SELECT DISTINCT employer.name
-FROM employment_contract
-JOIN employer ON id_empl = employer_id
-JOIN hire_office ON id_office = hire_office_id
-WHERE hire_office.service_fee_percentage > 3 AND employer.location != 'Moscow';
+SELECT id_empl, name
+FROM employer
+WHERE id_empl = ANY(
+	SELECT employer_id 
+	from employment_contract 
+	WHERE hire_office_id = ANY(
+		SELECT id_office 
+		FROM hire_office 
+		WHERE service_fee_percentage>3)
+) 
+AND location != 'Moscow';
 ```
-
+| id_empl |          name
+|---------|------------------------
+|       1 | Horns and hoofs
+|       2 | GAZ
+|       3 | Stankostroitelny Zavod
+|       4 | KINAP
+(4 rows)
 
 
 11.	Используя операции ALL-ANY реализовать следующие запросы:
@@ -675,24 +685,88 @@ UNION SELECT office_address FROM hire_office;
 требуется указать какие добавления в БД необходимо провести.
 ```sql
 --a)	найти профессии, заказывавшиеся всеми предприятиями не из Приморска;
+SELECT DISTINCT profession_id FROM employment_contract as contract
+WHERE EXISTS (SELECT * FROM employment_contract WHERE contract.profession_id NOT IN 
+(SELECT profession_id FROM employment_contract
+WHERE employer_id = 1 ));
 ```
+| profession_id
+|---------------
+|             6
+|             1
+|             3
+|             5
+(4 rows)
 ```sql
 --b)	найти такие бюро найма, которые участвовали в заключении договоров 
 --на все профессии со стоимостью найма более 15000руб.
+SELECT DISTINCT hire_office_id FROM employment_contract as contract
+WHERE EXISTS (
+SELECT * FROM employment_contract 
+WHERE contract.payment_rub>15000);
 ```
+| hire_office_id
+|----------------
+|              1
+|              3
+|              2
+|              4
+(4 rows)
 ```sql
 --c)	какие бюро найма не заключали договора на профессии, 
 --рабочие которых не изменили своего адреса работы;
+SELECT id_office 
+FROM hire_office AS ra
+WHERE NOT EXISTS(
+	SELECT * 
+	FROM employment_contract
+	WHERE ra.id_office IN (
+		SELECT hire_office_id 
+		FROM employment_contract
+		JOIN employer ON id_empl = employer_id
+		JOIN profession ON id_prof = profession_id 
+		WHERE location = plase_of_prev_work));
 ```
+| id_office
+|-----------
+|         1
+|         3
+|         5
+(3 rows)
 ```sql
 --d)	определить нанимателей, которые производили все заказы 
 --стоимостью не менее 100000руб. в апреле месяце.
+SELECT DISTINCT employer_id FROM employment_contract as contract
+WHERE EXISTS (
+SELECT * FROM employment_contract 
+WHERE contract.payment_rub>10000);
 ```
+| employer_id
+|-------------
+|           6
+|           1
+|           3
+|           5
+|           4
+|           2
+(6 rows)
 14.	Реализовать запросы с использованием аггрегатных функций:
 ```sql
 --a)	определить средний размер платы за услуги для тех бюро найма,
 --которые заключали договор со всеми предприятиями из Одессы;
+SELECT avg(payment_rub)
+FROM
+(
+SELECT hire_office_id, payment_rub
+FROM employment_contract
+JOIN employer ON id_empl = employer_id
+WHERE location = 'Odessa'
+) as tab;
 ```
+|        avg
+|--------------------
+| 31850.000000000000
+(1 row)
 ```sql
 --b)	найти суммарную стоимость всех заключенных договоров;
 SELECT sum(payment_rub)
